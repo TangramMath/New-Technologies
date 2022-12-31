@@ -1,24 +1,22 @@
 import { Resolver, Query, Mutation, Arg } from 'type-graphql';
 import IUser from '../../models/User';
+import { PrismaUser, getAll } from '../../models/User/prisma';
+import { PrismaClient } from '@prisma/client';
 
 @Resolver()
 export class UserResolver {
-  private data: IUser[] = [];
-  private registers = 0;
-
   @Query(() => [IUser])
-  async user() {
-    return this.data;
+  async users() {
+    return await getAll();
+  }
+
+  @Query(() => IUser)
+  async OneUser(@Arg('email') email: string) {
+    return await new PrismaUser(email, new PrismaClient()).getOne();
   }
 
   @Mutation(() => IUser)
-  async createUser(@Arg('name') name: string) {
-    const newUser = {
-      id: this.registers,
-      name,
-    };
-    this.registers++;
-    this.data.push(newUser);
-    return newUser;
+  async createUser(@Arg('name') name: string, @Arg('email') email: string) {
+    return new PrismaUser(email, new PrismaClient(), name).Create();
   }
 }

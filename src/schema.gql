@@ -4,14 +4,24 @@
 # -----------------------------------------------
 
 type IUser {
+  email: String!
   id: ID!
   name: String!
+  teams: Team!
 }
 
 type Mutation {
-  createUser(name: String!): IUser!
+  create(name: String!, userId: String!): Team!
+  createUser(email: String!, name: String!): IUser!
 }
 
 type Query {
-  user: [IUser!]!
+  OneUser(email: String!): IUser!
+  users: [IUser!]!
+}
+
+type Team {
+  id: ID!
+  name: String!
+  User: IUser!
 }
