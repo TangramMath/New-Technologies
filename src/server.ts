@@ -3,12 +3,8 @@ import 'reflect-metadata';
 import path from 'path';
 import { ApolloServer } from 'apollo-server';
 import { buildSchema } from 'type-graphql';
-import {
-  UserCrudResolver,
-  TeamCrudResolver,
-} from '../prisma/resolvers/crud/index';
 import { PrismaClient } from '@prisma/client';
-import { TeamRelationsResolver, UserRelationsResolver } from '../prisma';
+import { resolvers } from '../prisma/GeneratedGQL';
 
 interface Context {
   prisma: PrismaClient;
@@ -16,12 +12,7 @@ interface Context {
 
 async function main() {
   const schema = await buildSchema({
-    resolvers: [
-      UserCrudResolver,
-      TeamCrudResolver,
-      UserRelationsResolver,
-      TeamRelationsResolver,
-    ],
+    resolvers,
     emitSchemaFile: path.resolve(__dirname, 'schema.gql'),
     validate: false,
   });

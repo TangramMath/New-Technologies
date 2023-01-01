@@ -1,7 +1,7 @@
 {
   "name": "new-technologies",
   "version": "1.0.0",
-  "description": "NodeJS, old but good, TS, Apollo, Prisma, SQL DB, GraphQL!",
+  "description": "NodeJS, old but good, TS, Apollo, Prisma, SQL DB, GraphQL, also Docker!?!?!",
   "main": "index.js",
   "scripts": {
     "dev": "tsnd --respawn --transpile-only ./src/server.ts"
@@ -32,6 +32,7 @@
     "graphql-fields": "^2.0.3",
     "graphql-scalars": "^1.20.1",
     "prisma": "^4.8.0",
+    "prisma-docs-generator": "^0.5.0",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
     "typegraphql-prisma": "^0.23.2"

@@ -47,6 +47,17 @@ input NestedIntFilter {
   notIn: [Int!]
 }
 
+input NestedIntNullableFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntNullableFilter
+  notIn: [Int!]
+}
+
 input NestedStringFilter {
   contains: String
   endsWith: String
@@ -57,6 +68,37 @@ input NestedStringFilter {
   lt: String
   lte: String
   not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringNullableWithAggregatesFilter {
+  _count: NestedIntNullableFilter
+  _max: NestedStringNullableFilter
+  _min: NestedStringNullableFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableWithAggregatesFilter
   notIn: [String!]
   startsWith: String
 }
@@ -76,6 +118,10 @@ input NestedStringWithAggregatesFilter {
   not: NestedStringWithAggregatesFilter
   notIn: [String!]
   startsWith: String
+}
+
+input NullableStringFieldUpdateOperationsInput {
+  set: String
 }
 
 type Query {
@@ -124,6 +170,39 @@ input StringFilter {
   startsWith: String
 }
 
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableWithAggregatesFilter {
+  _count: NestedIntNullableFilter
+  _max: NestedStringNullableFilter
+  _min: NestedStringNullableFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringNullableWithAggregatesFilter
+  notIn: [String!]
+  startsWith: String
+}
+
 input StringWithAggregatesFilter {
   _count: NestedIntFilter
   _max: NestedStringFilter
@@ -143,41 +222,42 @@ input StringWithAggregatesFilter {
 }
 
 type Team {
+  _count: TeamCount
   id: String!
-  name: String!
-  User: User!
-  userId: String!
+  name: String
+  User(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
+}
+
+type TeamCount {
+  User: Int!
 }
 
 type TeamCountAggregate {
   _all: Int!
   id: Int!
   name: Int!
-  userId: Int!
 }
 
 input TeamCountOrderByAggregateInput {
   id: SortOrder
   name: SortOrder
-  userId: SortOrder
 }
 
 input TeamCreateInput {
   id: String
-  name: String!
-  User: UserCreateNestedOneWithoutTeamsInput!
+  name: String
+  User: UserCreateNestedManyWithoutTeamsInput
 }
 
 input TeamCreateManyInput {
   id: String
-  name: String!
-  userId: String!
+  name: String
 }
 
-input TeamCreateNestedOneWithoutUserInput {
-  connect: TeamWhereUniqueInput
-  connectOrCreate: TeamCreateOrConnectWithoutUserInput
-  create: TeamCreateWithoutUserInput
+input TeamCreateNestedManyWithoutUserInput {
+  connect: [TeamWhereUniqueInput!]
+  connectOrCreate: [TeamCreateOrConnectWithoutUserInput!]
+  create: [TeamCreateWithoutUserInput!]
 }
 
 input TeamCreateOrConnectWithoutUserInput {
@@ -187,7 +267,7 @@ input TeamCreateOrConnectWithoutUserInput {
 
 input TeamCreateWithoutUserInput {
   id: String
-  name: String!
+  name: String
 }
 
 type TeamGroupBy {
@@ -195,32 +275,37 @@ type TeamGroupBy {
   _max: TeamMaxAggregate
   _min: TeamMinAggregate
   id: String!
-  name: String!
-  userId: String!
+  name: String
+}
+
+input TeamListRelationFilter {
+  every: TeamWhereInput
+  none: TeamWhereInput
+  some: TeamWhereInput
 }
 
 type TeamMaxAggregate {
   id: String
   name: String
-  userId: String
 }
 
 input TeamMaxOrderByAggregateInput {
   id: SortOrder
   name: SortOrder
-  userId: SortOrder
 }
 
 type TeamMinAggregate {
   id: String
   name: String
-  userId: String
 }
 
 input TeamMinOrderByAggregateInput {
   id: SortOrder
   name: SortOrder
-  userId: SortOrder
+}
+
+input TeamOrderByRelationAggregateInput {
+  _count: SortOrder
 }
 
 input TeamOrderByWithAggregationInput {
@@ -229,87 +314,103 @@ input TeamOrderByWithAggregationInput {
   _min: TeamMinOrderByAggregateInput
   id: SortOrder
   name: SortOrder
-  userId: SortOrder
 }
 
 input TeamOrderByWithRelationInput {
   id: SortOrder
   name: SortOrder
-  User: UserOrderByWithRelationInput
-  userId: SortOrder
-}
-
-input TeamRelationFilter {
-  is: TeamWhereInput
-  isNot: TeamWhereInput
+  User: UserOrderByRelationAggregateInput
 }
 
 enum TeamScalarFieldEnum {
   id
   name
-  userId
+}
+
+input TeamScalarWhereInput {
+  AND: [TeamScalarWhereInput!]
+  id: StringFilter
+  name: StringNullableFilter
+  NOT: [TeamScalarWhereInput!]
+  OR: [TeamScalarWhereInput!]
 }
 
 input TeamScalarWhereWithAggregatesInput {
   AND: [TeamScalarWhereWithAggregatesInput!]
   id: StringWithAggregatesFilter
-  name: StringWithAggregatesFilter
+  name: StringNullableWithAggregatesFilter
   NOT: [TeamScalarWhereWithAggregatesInput!]
   OR: [TeamScalarWhereWithAggregatesInput!]
-  userId: StringWithAggregatesFilter
 }
 
 input TeamUpdateInput {
   id: StringFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
-  User: UserUpdateOneRequiredWithoutTeamsNestedInput
+  name: NullableStringFieldUpdateOperationsInput
+  User: UserUpdateManyWithoutTeamsNestedInput
 }
 
 input TeamUpdateManyMutationInput {
   id: StringFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
+  name: NullableStringFieldUpdateOperationsInput
 }
 
-input TeamUpdateOneWithoutUserNestedInput {
-  connect: TeamWhereUniqueInput
-  connectOrCreate: TeamCreateOrConnectWithoutUserInput
-  create: TeamCreateWithoutUserInput
-  delete: Boolean
-  disconnect: Boolean
-  update: TeamUpdateWithoutUserInput
-  upsert: TeamUpsertWithoutUserInput
+input TeamUpdateManyWithoutUserNestedInput {
+  connect: [TeamWhereUniqueInput!]
+  connectOrCreate: [TeamCreateOrConnectWithoutUserInput!]
+  create: [TeamCreateWithoutUserInput!]
+  delete: [TeamWhereUniqueInput!]
+  deleteMany: [TeamScalarWhereInput!]
+  disconnect: [TeamWhereUniqueInput!]
+  set: [TeamWhereUniqueInput!]
+  update: [TeamUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [TeamUpdateManyWithWhereWithoutUserInput!]
+  upsert: [TeamUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input TeamUpdateManyWithWhereWithoutUserInput {
+  data: TeamUpdateManyMutationInput!
+  where: TeamScalarWhereInput!
 }
 
 input TeamUpdateWithoutUserInput {
   id: StringFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
+  name: NullableStringFieldUpdateOperationsInput
 }
 
-input TeamUpsertWithoutUserInput {
+input TeamUpdateWithWhereUniqueWithoutUserInput {
+  data: TeamUpdateWithoutUserInput!
+  where: TeamWhereUniqueInput!
+}
+
+input TeamUpsertWithWhereUniqueWithoutUserInput {
   create: TeamCreateWithoutUserInput!
   update: TeamUpdateWithoutUserInput!
+  where: TeamWhereUniqueInput!
 }
 
 input TeamWhereInput {
   AND: [TeamWhereInput!]
   id: StringFilter
-  name: StringFilter
+  name: StringNullableFilter
   NOT: [TeamWhereInput!]
   OR: [TeamWhereInput!]
-  User: UserRelationFilter
-  userId: StringFilter
+  User: UserListRelationFilter
 }
 
 input TeamWhereUniqueInput {
   id: String
-  userId: String
 }
 
 type User {
+  _count: UserCount
   email: String!
   id: String!
   name: String!
-  teams: Team
+  teams(cursor: TeamWhereUniqueInput, distinct: [TeamScalarFieldEnum!], orderBy: [TeamOrderByWithRelationInput!], skip: Int, take: Int, where: TeamWhereInput): [Team!]!
+}
+
+type UserCount {
+  teams: Int!
 }
 
 type UserCountAggregate {
@@ -329,7 +430,7 @@ input UserCreateInput {
   email: String!
   id: String
   name: String!
-  teams: TeamCreateNestedOneWithoutUserInput
+  teams: TeamCreateNestedManyWithoutUserInput
 }
 
 input UserCreateManyInput {
@@ -338,10 +439,10 @@ input UserCreateManyInput {
   name: String!
 }
 
-input UserCreateNestedOneWithoutTeamsInput {
-  connect: UserWhereUniqueInput
-  connectOrCreate: UserCreateOrConnectWithoutTeamsInput
-  create: UserCreateWithoutTeamsInput
+input UserCreateNestedManyWithoutTeamsInput {
+  connect: [UserWhereUniqueInput!]
+  connectOrCreate: [UserCreateOrConnectWithoutTeamsInput!]
+  create: [UserCreateWithoutTeamsInput!]
 }
 
 input UserCreateOrConnectWithoutTeamsInput {
@@ -362,6 +463,12 @@ type UserGroupBy {
   email: String!
   id: String!
   name: String!
+}
+
+input UserListRelationFilter {
+  every: UserWhereInput
+  none: UserWhereInput
+  some: UserWhereInput
 }
 
 type UserMaxAggregate {
@@ -388,6 +495,10 @@ input UserMinOrderByAggregateInput {
   name: SortOrder
 }
 
+input UserOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input UserOrderByWithAggregationInput {
   _count: UserCountOrderByAggregateInput
   _max: UserMaxOrderByAggregateInput
@@ -401,18 +512,22 @@ input UserOrderByWithRelationInput {
   email: SortOrder
   id: SortOrder
   name: SortOrder
-  teams: TeamOrderByWithRelationInput
-}
-
-input UserRelationFilter {
-  is: UserWhereInput
-  isNot: UserWhereInput
+  teams: TeamOrderByRelationAggregateInput
 }
 
 enum UserScalarFieldEnum {
   email
   id
   name
+}
+
+input UserScalarWhereInput {
+  AND: [UserScalarWhereInput!]
+  email: StringFilter
+  id: StringFilter
+  name: StringFilter
+  NOT: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
 }
 
 input UserScalarWhereWithAggregatesInput {
@@ -428,7 +543,7 @@ input UserUpdateInput {
   email: StringFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
-  teams: TeamUpdateOneWithoutUserNestedInput
+  teams: TeamUpdateManyWithoutUserNestedInput
 }
 
 input UserUpdateManyMutationInput {
@@ -437,12 +552,22 @@ input UserUpdateManyMutationInput {
   name: StringFieldUpdateOperationsInput
 }
 
-input UserUpdateOneRequiredWithoutTeamsNestedInput {
-  connect: UserWhereUniqueInput
-  connectOrCreate: UserCreateOrConnectWithoutTeamsInput
-  create: UserCreateWithoutTeamsInput
-  update: UserUpdateWithoutTeamsInput
-  upsert: UserUpsertWithoutTeamsInput
+input UserUpdateManyWithoutTeamsNestedInput {
+  connect: [UserWhereUniqueInput!]
+  connectOrCreate: [UserCreateOrConnectWithoutTeamsInput!]
+  create: [UserCreateWithoutTeamsInput!]
+  delete: [UserWhereUniqueInput!]
+  deleteMany: [UserScalarWhereInput!]
+  disconnect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutTeamsInput!]
+  updateMany: [UserUpdateManyWithWhereWithoutTeamsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutTeamsInput!]
+}
+
+input UserUpdateManyWithWhereWithoutTeamsInput {
+  data: UserUpdateManyMutationInput!
+  where: UserScalarWhereInput!
 }
 
 input UserUpdateWithoutTeamsInput {
@@ -451,9 +576,15 @@ input UserUpdateWithoutTeamsInput {
   name: StringFieldUpdateOperationsInput
 }
 
-input UserUpsertWithoutTeamsInput {
+input UserUpdateWithWhereUniqueWithoutTeamsInput {
+  data: UserUpdateWithoutTeamsInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutTeamsInput {
   create: UserCreateWithoutTeamsInput!
   update: UserUpdateWithoutTeamsInput!
+  where: UserWhereUniqueInput!
 }
 
 input UserWhereInput {
@@ -463,7 +594,7 @@ input UserWhereInput {
   name: StringFilter
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
-  teams: TeamRelationFilter
+  teams: TeamListRelationFilter
 }
 
 input UserWhereUniqueInput {
