@@ -3,25 +3,470 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type IUser {
-  email: String!
-  id: ID!
-  name: String!
-  teams: Team!
+type AffectedRowsOutput {
+  count: Int!
+}
+
+type AggregateTeam {
+  _count: TeamCountAggregate
+  _max: TeamMaxAggregate
+  _min: TeamMinAggregate
+}
+
+type AggregateUser {
+  _count: UserCountAggregate
+  _max: UserMaxAggregate
+  _min: UserMinAggregate
 }
 
 type Mutation {
-  create(name: String!, userId: String!): Team!
-  createUser(email: String!, name: String!): IUser!
+  createManyTeam(data: [TeamCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
+  createManyUser(data: [UserCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
+  createOneTeam(data: TeamCreateInput!): Team!
+  createOneUser(data: UserCreateInput!): User!
+  deleteManyTeam(where: TeamWhereInput): AffectedRowsOutput!
+  deleteManyUser(where: UserWhereInput): AffectedRowsOutput!
+  deleteOneTeam(where: TeamWhereUniqueInput!): Team
+  deleteOneUser(where: UserWhereUniqueInput!): User
+  updateManyTeam(data: TeamUpdateManyMutationInput!, where: TeamWhereInput): AffectedRowsOutput!
+  updateManyUser(data: UserUpdateManyMutationInput!, where: UserWhereInput): AffectedRowsOutput!
+  updateOneTeam(data: TeamUpdateInput!, where: TeamWhereUniqueInput!): Team
+  updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  upsertOneTeam(create: TeamCreateInput!, update: TeamUpdateInput!, where: TeamWhereUniqueInput!): Team!
+  upsertOneUser(create: UserCreateInput!, update: UserUpdateInput!, where: UserWhereUniqueInput!): User!
+}
+
+input NestedIntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+input NestedStringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedStringFilter
+  _min: NestedStringFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringWithAggregatesFilter
+  notIn: [String!]
+  startsWith: String
 }
 
 type Query {
-  OneUser(email: String!): IUser!
-  users: [IUser!]!
+  aggregateTeam(cursor: TeamWhereUniqueInput, orderBy: [TeamOrderByWithRelationInput!], skip: Int, take: Int, where: TeamWhereInput): AggregateTeam!
+  aggregateUser(cursor: UserWhereUniqueInput, orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): AggregateUser!
+  findFirstTeam(cursor: TeamWhereUniqueInput, distinct: [TeamScalarFieldEnum!], orderBy: [TeamOrderByWithRelationInput!], skip: Int, take: Int, where: TeamWhereInput): Team
+  findFirstTeamOrThrow(cursor: TeamWhereUniqueInput, distinct: [TeamScalarFieldEnum!], orderBy: [TeamOrderByWithRelationInput!], skip: Int, take: Int, where: TeamWhereInput): Team
+  findFirstUser(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): User
+  findFirstUserOrThrow(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): User
+  getTeam(where: TeamWhereUniqueInput!): Team
+  getUser(where: UserWhereUniqueInput!): User
+  groupByTeam(by: [TeamScalarFieldEnum!]!, having: TeamScalarWhereWithAggregatesInput, orderBy: [TeamOrderByWithAggregationInput!], skip: Int, take: Int, where: TeamWhereInput): [TeamGroupBy!]!
+  groupByUser(by: [UserScalarFieldEnum!]!, having: UserScalarWhereWithAggregatesInput, orderBy: [UserOrderByWithAggregationInput!], skip: Int, take: Int, where: UserWhereInput): [UserGroupBy!]!
+  team(where: TeamWhereUniqueInput!): Team
+  teams(cursor: TeamWhereUniqueInput, distinct: [TeamScalarFieldEnum!], orderBy: [TeamOrderByWithRelationInput!], skip: Int, take: Int, where: TeamWhereInput): [Team!]!
+  user(where: UserWhereUniqueInput!): User
+  users(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
+}
+
+enum QueryMode {
+  default
+  insensitive
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+input StringFieldUpdateOperationsInput {
+  set: String
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedStringFilter
+  _min: NestedStringFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringWithAggregatesFilter
+  notIn: [String!]
+  startsWith: String
 }
 
 type Team {
-  id: ID!
+  id: String!
   name: String!
-  User: IUser!
+  User: User!
+  userId: String!
+}
+
+type TeamCountAggregate {
+  _all: Int!
+  id: Int!
+  name: Int!
+  userId: Int!
+}
+
+input TeamCountOrderByAggregateInput {
+  id: SortOrder
+  name: SortOrder
+  userId: SortOrder
+}
+
+input TeamCreateInput {
+  id: String
+  name: String!
+  User: UserCreateNestedOneWithoutTeamsInput!
+}
+
+input TeamCreateManyInput {
+  id: String
+  name: String!
+  userId: String!
+}
+
+input TeamCreateNestedOneWithoutUserInput {
+  connect: TeamWhereUniqueInput
+  connectOrCreate: TeamCreateOrConnectWithoutUserInput
+  create: TeamCreateWithoutUserInput
+}
+
+input TeamCreateOrConnectWithoutUserInput {
+  create: TeamCreateWithoutUserInput!
+  where: TeamWhereUniqueInput!
+}
+
+input TeamCreateWithoutUserInput {
+  id: String
+  name: String!
+}
+
+type TeamGroupBy {
+  _count: TeamCountAggregate
+  _max: TeamMaxAggregate
+  _min: TeamMinAggregate
+  id: String!
+  name: String!
+  userId: String!
+}
+
+type TeamMaxAggregate {
+  id: String
+  name: String
+  userId: String
+}
+
+input TeamMaxOrderByAggregateInput {
+  id: SortOrder
+  name: SortOrder
+  userId: SortOrder
+}
+
+type TeamMinAggregate {
+  id: String
+  name: String
+  userId: String
+}
+
+input TeamMinOrderByAggregateInput {
+  id: SortOrder
+  name: SortOrder
+  userId: SortOrder
+}
+
+input TeamOrderByWithAggregationInput {
+  _count: TeamCountOrderByAggregateInput
+  _max: TeamMaxOrderByAggregateInput
+  _min: TeamMinOrderByAggregateInput
+  id: SortOrder
+  name: SortOrder
+  userId: SortOrder
+}
+
+input TeamOrderByWithRelationInput {
+  id: SortOrder
+  name: SortOrder
+  User: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
+input TeamRelationFilter {
+  is: TeamWhereInput
+  isNot: TeamWhereInput
+}
+
+enum TeamScalarFieldEnum {
+  id
+  name
+  userId
+}
+
+input TeamScalarWhereWithAggregatesInput {
+  AND: [TeamScalarWhereWithAggregatesInput!]
+  id: StringWithAggregatesFilter
+  name: StringWithAggregatesFilter
+  NOT: [TeamScalarWhereWithAggregatesInput!]
+  OR: [TeamScalarWhereWithAggregatesInput!]
+  userId: StringWithAggregatesFilter
+}
+
+input TeamUpdateInput {
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  User: UserUpdateOneRequiredWithoutTeamsNestedInput
+}
+
+input TeamUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input TeamUpdateOneWithoutUserNestedInput {
+  connect: TeamWhereUniqueInput
+  connectOrCreate: TeamCreateOrConnectWithoutUserInput
+  create: TeamCreateWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  update: TeamUpdateWithoutUserInput
+  upsert: TeamUpsertWithoutUserInput
+}
+
+input TeamUpdateWithoutUserInput {
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input TeamUpsertWithoutUserInput {
+  create: TeamCreateWithoutUserInput!
+  update: TeamUpdateWithoutUserInput!
+}
+
+input TeamWhereInput {
+  AND: [TeamWhereInput!]
+  id: StringFilter
+  name: StringFilter
+  NOT: [TeamWhereInput!]
+  OR: [TeamWhereInput!]
+  User: UserRelationFilter
+  userId: StringFilter
+}
+
+input TeamWhereUniqueInput {
+  id: String
+  userId: String
+}
+
+type User {
+  email: String!
+  id: String!
+  name: String!
+  teams: Team
+}
+
+type UserCountAggregate {
+  _all: Int!
+  email: Int!
+  id: Int!
+  name: Int!
+}
+
+input UserCountOrderByAggregateInput {
+  email: SortOrder
+  id: SortOrder
+  name: SortOrder
+}
+
+input UserCreateInput {
+  email: String!
+  id: String
+  name: String!
+  teams: TeamCreateNestedOneWithoutUserInput
+}
+
+input UserCreateManyInput {
+  email: String!
+  id: String
+  name: String!
+}
+
+input UserCreateNestedOneWithoutTeamsInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutTeamsInput
+  create: UserCreateWithoutTeamsInput
+}
+
+input UserCreateOrConnectWithoutTeamsInput {
+  create: UserCreateWithoutTeamsInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserCreateWithoutTeamsInput {
+  email: String!
+  id: String
+  name: String!
+}
+
+type UserGroupBy {
+  _count: UserCountAggregate
+  _max: UserMaxAggregate
+  _min: UserMinAggregate
+  email: String!
+  id: String!
+  name: String!
+}
+
+type UserMaxAggregate {
+  email: String
+  id: String
+  name: String
+}
+
+input UserMaxOrderByAggregateInput {
+  email: SortOrder
+  id: SortOrder
+  name: SortOrder
+}
+
+type UserMinAggregate {
+  email: String
+  id: String
+  name: String
+}
+
+input UserMinOrderByAggregateInput {
+  email: SortOrder
+  id: SortOrder
+  name: SortOrder
+}
+
+input UserOrderByWithAggregationInput {
+  _count: UserCountOrderByAggregateInput
+  _max: UserMaxOrderByAggregateInput
+  _min: UserMinOrderByAggregateInput
+  email: SortOrder
+  id: SortOrder
+  name: SortOrder
+}
+
+input UserOrderByWithRelationInput {
+  email: SortOrder
+  id: SortOrder
+  name: SortOrder
+  teams: TeamOrderByWithRelationInput
+}
+
+input UserRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
+enum UserScalarFieldEnum {
+  email
+  id
+  name
+}
+
+input UserScalarWhereWithAggregatesInput {
+  AND: [UserScalarWhereWithAggregatesInput!]
+  email: StringWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  name: StringWithAggregatesFilter
+  NOT: [UserScalarWhereWithAggregatesInput!]
+  OR: [UserScalarWhereWithAggregatesInput!]
+}
+
+input UserUpdateInput {
+  email: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  teams: TeamUpdateOneWithoutUserNestedInput
+}
+
+input UserUpdateManyMutationInput {
+  email: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input UserUpdateOneRequiredWithoutTeamsNestedInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutTeamsInput
+  create: UserCreateWithoutTeamsInput
+  update: UserUpdateWithoutTeamsInput
+  upsert: UserUpsertWithoutTeamsInput
+}
+
+input UserUpdateWithoutTeamsInput {
+  email: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input UserUpsertWithoutTeamsInput {
+  create: UserCreateWithoutTeamsInput!
+  update: UserUpdateWithoutTeamsInput!
+}
+
+input UserWhereInput {
+  AND: [UserWhereInput!]
+  email: StringFilter
+  id: StringFilter
+  name: StringFilter
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  teams: TeamRelationFilter
+}
+
+input UserWhereUniqueInput {
+  email: String
+  id: String
 }
