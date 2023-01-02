@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  app:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: node-prisma
+    depends_on:
+      - db
+    ports:
+      - "4000:4000"
+    restart: always
+    volumes:
+      - .:/usr/app
+
+  db:
+    container_name: 'node-mysql'
+    image: mysql
+    restart: unless-stopped
+    hostname: mysql
+    ports: 
+      - '3306:3306'
+    environment: 
+      - MYSQL_ROOT_PASSWORD=admin
+      - TZ=America/Sao_Paulo
+    volumes:
+     - mysql_docker:/var/lib/mysql
+  
+volumes:
+  mysql_docker:
