@@ -4,7 +4,7 @@ WORKDIR /usr/app
 
 COPY . .
 
-RUN yarn install --frozen-lockfile
+RUN yarn
 RUN yarn prisma generate
 
 EXPOSE 4000

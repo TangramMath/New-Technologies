@@ -18,7 +18,7 @@ generator typegraphql {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:admin@mysql:3306/drivenTest"
+  url      = env("DATABASE_URL")
 }
 
 model User {

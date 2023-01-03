@@ -7,6 +7,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: node-prisma
+    environment:
+      - DATABASE_URL=mysql://root:admin@mysql:3306/drivenTest
     depends_on:
       - db
     ports:
